@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "345029820298",
+    "project_id": "moodku-cok",
+    "storage_bucket": "moodku-cok.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345029820298:android:3b17026e04c05910f01273",
+        "android_client_info": {
+          "package_name": "com.example.moodku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345029820298-6p0b4jn2tjet0egq717c5h8hvmaivgeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGwLWsyUZYeB8ObLGJtMG9qsLnFepCnKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345029820298-6p0b4jn2tjet0egq717c5h8hvmaivgeu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
