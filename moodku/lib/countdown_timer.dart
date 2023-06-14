@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class Countdown extends StatefulWidget {
@@ -80,17 +79,43 @@ class _CountdownState extends State<Countdown> {
           children: [
             ElevatedButton(
               onPressed: _pauseTimer,
-              child: Icon(Icons.pause),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(16.0),
+              ),
+              child: Icon(
+                Icons.pause,
+                size: 32.0,
+              ),
             ),
             SizedBox(width: 16.0),
             ElevatedButton(
               onPressed: _resumeTimer,
-              child: Icon(Icons.play_arrow),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: CircleBorder(),
+                padding: EdgeInsets.all(16.0),
+              ),
+              child: Icon(
+                Icons.play_arrow,
+                size: 32.0,
+              ),
             ),
             SizedBox(width: 16.0),
             ElevatedButton(
               onPressed: _resetTimer,
-              child: Text('Reset'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              ),
+              child: Text(
+                'Reset',
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ],
         ),

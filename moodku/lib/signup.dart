@@ -80,7 +80,6 @@ class _SignUpPageState extends State<SignUpPage> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  // Navigator.pushNamed(context, "/");
                 },
                 child: const Text('OK'),
               ),
@@ -190,7 +189,7 @@ class _SignUpPageState extends State<SignUpPage> {
           onPressed: () {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) {
-                return HomeScreen();
+                return LoginPrototype();
               }),
             );
           },

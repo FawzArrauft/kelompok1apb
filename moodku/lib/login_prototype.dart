@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moodku/main.dart';
+import 'package:moodku/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constData.dart';
 
@@ -181,7 +182,11 @@ class _LoginPrototypeState extends State<LoginPrototype> {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pushNamed(context, '/register');
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(builder: (context) {
+                                    return SignUpPage();
+                                  }),
+                                );
                               },
                           ),
                         ]),
