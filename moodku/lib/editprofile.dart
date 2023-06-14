@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:moodku/login_prototype.dart';
+import 'package:moodku/main.dart';
+import 'constData.dart';
+import 'share_preferences.dart';
 
 class editProfile extends StatefulWidget {
   const editProfile({Key? key}) : super(key: key);
@@ -35,6 +39,20 @@ class _EditProfileState extends State<editProfile> {
         elevation: 0,
         title: Text("Edit Profile"),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -150,6 +168,19 @@ class _EditProfileState extends State<editProfile> {
                 child: Text("Save"),
               ),
             ),
+            Align(
+              child: ElevatedButton(
+                  onPressed: () {
+                    prefs.remove(strngE);
+                    prefs.setString(strngE, "");
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) {
+                        return LoginPrototype();
+                      }),
+                    );
+                  },
+                  child: Text("Logout")),
+            )
           ],
         ),
       ),

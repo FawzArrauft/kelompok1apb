@@ -2,11 +2,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:moodku/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'constData.dart';
 
 class LoginPrototype extends StatefulWidget {
   const LoginPrototype({Key? key});
-
   @override
   State<LoginPrototype> createState() => _LoginPrototypeState();
 }
@@ -37,6 +38,11 @@ class _LoginPrototypeState extends State<LoginPrototype> {
         });
         return;
       }
+      //Menyimpan Data Email menggunakan SharedPreferences
+      Future<void> saveData(String key, String value) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString(key, value);
+      }
 
       // Validasi email menggunakan regular expression
       final emailRegExp =
@@ -64,7 +70,12 @@ class _LoginPrototypeState extends State<LoginPrototype> {
 
       if (querySnapshot.docs.isNotEmpty) {
         // Pengguna ditemukan dalam koleksi "Users", pindah ke halaman beranda
-        Navigator.pushNamed(context, '/home');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) {
+            return HomeScreen();
+          }),
+        );
+        saveData(strngE, email);
       } else {
         setState(() {
           _errorMessage = 'Email atau password tidak valid.';
@@ -79,12 +90,6 @@ class _LoginPrototypeState extends State<LoginPrototype> {
         _errorMessage = 'Terjadi kesalahan saat login.';
       });
     }
-  }
-
-  //Menyimpan Data Email menggunakan SharedPreferences
-  Future<void> saveData(String key, String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(key, value);
   }
 
   @override
@@ -143,7 +148,7 @@ class _LoginPrototypeState extends State<LoginPrototype> {
                         minWidth: double.infinity,
                         height: 50,
                         onPressed: _login,
-                        color: Color.fromARGB(255, 244, 255, 40),
+                        color: Color.fromARGB(255, 24, 114, 248),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -170,7 +175,7 @@ class _LoginPrototypeState extends State<LoginPrototype> {
                           TextSpan(
                             text: "Create an Account",
                             style: TextStyle(
-                              color: Colors.yellow[900],
+                              color: Colors.blue[900],
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),

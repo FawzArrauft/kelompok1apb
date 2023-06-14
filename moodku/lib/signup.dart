@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:moodku/login_prototype.dart';
+import 'package:moodku/main.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -78,13 +80,18 @@ class _SignUpPageState extends State<SignUpPage> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, "/");
+                  // Navigator.pushNamed(context, "/");
                 },
                 child: const Text('OK'),
               ),
             ],
           );
         },
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return LoginPrototype();
+        }),
       );
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'An error occurred. Please try again later.';
@@ -181,7 +188,11 @@ class _SignUpPageState extends State<SignUpPage> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, '/');
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }),
+            );
           },
         ),
       ),
@@ -247,7 +258,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: _signUp,
-                  color: Colors.yellow[900],
+                  color: Colors.blue[600],
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),

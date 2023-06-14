@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moodku/editprofile.dart';
 
 class EditProfileButton extends StatelessWidget {
   const EditProfileButton({super.key});
@@ -8,7 +9,11 @@ class EditProfileButton extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.settings),
       onPressed: () {
-        Navigator.pushNamed(context, '/editProfile');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) {
+            return editProfile();
+          }),
+        );
       },
     );
   }
