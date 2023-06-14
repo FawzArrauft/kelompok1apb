@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPrototype extends StatefulWidget {
   const LoginPrototype({Key? key});
@@ -78,6 +79,12 @@ class _LoginPrototypeState extends State<LoginPrototype> {
         _errorMessage = 'Terjadi kesalahan saat login.';
       });
     }
+  }
+
+  //Menyimpan Data Email menggunakan SharedPreferences
+  Future<void> saveData(String key, String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(key, value);
   }
 
   @override

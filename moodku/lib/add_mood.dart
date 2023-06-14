@@ -1,4 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(AddMoodApp());
+}
+
+class AddMoodApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Add Mood',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: AddMood(),
+    );
+  }
+}
 
 class AddMood extends StatefulWidget {
   @override
@@ -8,6 +29,8 @@ class AddMood extends StatefulWidget {
 class _AddMoodState extends State<AddMood> {
   TextEditingController _moodController = TextEditingController();
   List<String> _moodList = [];
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +44,25 @@ class _AddMoodState extends State<AddMood> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Coba ceritakan perasaanmu hari ini',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  'Ceritakan Perasaanmu Hari Ini',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 16),
                 TextField(
                   controller: _moodController,
                   decoration: InputDecoration(
-                    hintText: 'Tambahkan catatan perasaan',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.add),
                       onPressed: () {
                         setState(() {
-                          _moodList.add(_moodController.text);
+                          final moodText = _moodController.text;
+                          _moodList.add(moodText);
+                          saveMoodToFirestore(moodText);
                           _moodController.clear();
                         });
                       },
@@ -44,17 +73,84 @@ class _AddMoodState extends State<AddMood> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _moodList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_moodList[index]),
-                );
-              },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(234, 230, 187, 46),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+              ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('new_moods').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  _moodList = snapshot.data!.docs
+                      .map((doc) => doc['mood'] as String)
+                      .toList();
+
+                  return ListView.builder(
+                    itemCount: _moodList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        tileColor: Colors.white,
+                        leading: CircleAvatar(
+                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                          child: Icon(
+                            Icons.emoji_emotions_outlined,
+                            color: Color.fromARGB(255, 255, 0, 0),
+                          ),
+                        ),
+                        title: Text(
+                          _moodList[index],
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              final moodText = _moodList[index];
+                              _moodList.removeAt(index);
+                              deleteMoodFromFirestore(moodText);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> saveMoodToFirestore(String mood) async {
+    await firestore.collection('new_moods').add({
+      'mood': mood,
+      'timestamp': DateTime.now(),
+    });
+  }
+
+  Future<void> deleteMoodFromFirestore(String mood) async {
+    final snapshot = await firestore
+        .collection('new_moods')
+        .where('mood', isEqualTo: mood)
+        .get();
+    snapshot.docs.forEach((doc) {
+      doc.reference.delete();
+    });
   }
 }
